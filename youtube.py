@@ -20,17 +20,21 @@ youtube = OAuth2Service(
 
 redirect_uri = 'https://yt.mause.me' if PROD else 'http://localhost:5000'
 
-get_authorize_url = lambda: youtube.get_authorize_url(
-    scope='https://www.googleapis.com/auth/youtube',
-    response_type='code',
-    redirect_uri=redirect_uri + '/oauth2callback'
-)
 
-get_auth_session = lambda code: youtube.get_auth_session(
-    data={
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': redirect_uri + '/oauth2callback'
-    },
-    decoder=lambda q: json.loads(q.decode())
-)
+def get_authorize_url():
+    return youtube.get_authorize_url(
+        scope='https://www.googleapis.com/auth/youtube',
+        response_type='code',
+        redirect_uri=redirect_uri + '/oauth2callback'
+    )
+
+
+def get_auth_session(code):
+    return youtube.get_auth_session(
+        data={
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': redirect_uri + '/oauth2callback'
+        },
+        decoder=lambda q: json.loads(q.decode())
+    )

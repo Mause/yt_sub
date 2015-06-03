@@ -87,10 +87,11 @@ def calculate_next_page_token(page, max_result):
     )
 
 
-pages = lambda max_result=50: (
-    calculate_next_page_token(page, max_result)
-    for page in count(1)
-)
+def pages(max_result=50):
+    return (
+        calculate_next_page_token(page, max_result)
+        for page in count(1)
+    )
 
 
 def paginate(func, *args, **kw):
