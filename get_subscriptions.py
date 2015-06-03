@@ -6,6 +6,7 @@ import csv
 import pickle
 from functools import wraps
 from io import StringIO
+from itertools import count
 from operator import itemgetter
 
 from flask.ext.heroku import Heroku
@@ -56,34 +57,40 @@ def oauth2callback():
     return resp
 
 
-def pages():
-    """
-    Pulled from http://stackoverflow.com/questions/30263293/
-    """
-    d0 = "AEIMQUYcgkosw048"
-    d1 = d2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    d1c, d2c = 0, 0
-    overflowSuffix = "Q"
-    direction = "AA"
-    d2OverflowCounter = 0
-    pageSize = 50
+def calculate_next_page_token(page, max_result):
+    page -= 1
+    low = 'AEIMQUYcgkosw048'
+    high = 'ABCDEFGHIJKLMNOP'
+    len_low = len(low)
+    len_high = len(high)
 
-    for i in range(1024):
-        if i % pageSize == 0:
-            yield (
-                "C" + d1[((d1c // len(d0)) % len(d1))] +
-                d0[(i % len(d0))] +
-                overflowSuffix +
-                direction
-            )
+    position = page * max_result
 
-        d1c += 1
-        d2c += 1
-        if d1c % (1 << 8) == 0:
-            d1c = 1 << 7
-        if d2c % (1 << 7) == 0:
-            d2OverflowCounter += 1
-            overflowSuffix = d2[d2OverflowCounter] + "E"
+    overflow_token = 'Q'
+    if position >= 128:
+        overflow_token_iteration = position // 128
+        overflow_token = '%sE' % high[overflow_token_iteration]
+        pass
+    low_iteration = position % len_low
+
+    # at this position the iteration starts with 'I' again (after 'P')
+    if position >= 256:
+        multiplier = (position // 128) - 1
+        position -= 128 * multiplier
+        pass
+    high_iteration = (position / len_low) % len_high
+
+    return 'C{}{}{}AA'.format(
+        high[high_iteration],
+        low[low_iteration],
+        overflow_token
+    )
+
+
+pages = lambda max_result=50: (
+    calculate_next_page_token(page, max_result)
+    for page in count(1)
+)
 
 
 def paginate(func, *args, **kw):
