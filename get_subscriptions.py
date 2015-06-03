@@ -71,14 +71,14 @@ def calculate_next_page_token(page, max_result):
         overflow_token_iteration = position // 128
         overflow_token = '%sE' % high[overflow_token_iteration]
         pass
-    low_iteration = position % len_low
+    low_iteration = int(position % len_low)
 
     # at this position the iteration starts with 'I' again (after 'P')
     if position >= 256:
         multiplier = (position // 128) - 1
         position -= 128 * multiplier
         pass
-    high_iteration = (position / len_low) % len_high
+    high_iteration = int((position / len_low) % len_high)
 
     return 'C{}{}{}AA'.format(
         high[high_iteration],
