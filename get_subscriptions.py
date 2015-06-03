@@ -113,8 +113,6 @@ def paginate(func, *args, **kw):
 
 
 def get_subs(session):
-    # import ipdb
-    # ipdb.set_trace()
     # youtube.sess.inject(session)
     # return youtube.gdata.subscriptions().list(
     #     part='id,snippet,contentDetails',
@@ -189,8 +187,6 @@ def subscriptions(session):
 
 @app.route('/logout')
 def logout():
-    import ipdb
-    ipdb.set_trace()
     resp = redirect(url_for('index'))
     resp.delete_cookie('session')
     return resp
