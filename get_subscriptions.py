@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import csv
 import pickle
 from functools import wraps
@@ -203,5 +204,7 @@ def send_static(path):
 
 
 if __name__ == "__main__":
-    import os
-    app.run(debug=True, port=os.environ.get('PORT', 9000))
+    app.run(
+        debug=True,
+        port=int(os.environ.get('PORT', 9000))
+    )
