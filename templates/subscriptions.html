@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <a class="button" href="/logout">Logout</a>
+                <a class="button" href="/subscriptions.csv">As csv</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                {% for sub in items %}
+                    <div>
+                        <h5>{{sub["snippet"]["title"]}}</h5>
+                        <p>{{sub["snippet"]["description"]}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
