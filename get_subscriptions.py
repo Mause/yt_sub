@@ -147,7 +147,7 @@ def to_csv(headers, data):
 
 @app.route('/subscriptions.csv')
 @login_required
-def show_csv(session):
+def subscriptions_csv(session):
     items = get_subs(session)
     snippets = map(itemgetter('snippet'), items)
     snippets = sorted(snippets, key=itemgetter('title'))
@@ -166,9 +166,9 @@ def show_csv(session):
     )
 
 
-@app.route('/show')
+@app.route('/subscriptions')
 @login_required
-def show(session):
+def subscriptions(session):
     try:
         items = list(get_subs(session))
     except AuthError:
@@ -192,7 +192,7 @@ def logout():
 @app.route('/')
 def index():
     return (
-        redirect(url_for('show'))
+        redirect(url_for('subscriptions'))
         if get_session()
         else
         render_template('index.html')
