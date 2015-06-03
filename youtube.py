@@ -18,7 +18,7 @@ youtube = OAuth2Service(
 )
 
 
-redirect_uri = 'http://yt.mause.me' if PROD else 'http://localhost:5000'
+redirect_uri = 'https://yt.mause.me' if PROD else 'http://localhost:5000'
 
 get_authorize_url = lambda: youtube.get_authorize_url(
     scope='https://www.googleapis.com/auth/youtube',
