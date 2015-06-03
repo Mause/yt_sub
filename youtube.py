@@ -5,7 +5,7 @@ import json
 
 from rauth import OAuth2Service
 
-from auth import CLIENT_ID, CLIENT_SECRET
+from auth import CLIENT_ID, CLIENT_SECRET, PROD
 
 
 youtube = OAuth2Service(
@@ -17,8 +17,8 @@ youtube = OAuth2Service(
     base_url='https://www.googleapis.com/youtube/v3/'
 )
 
-redirect_uri = 'http://localhost:5000'
 
+redirect_uri = 'http://yt.mause.me' if PROD else 'http://localhost:5000'
 
 get_authorize_url = lambda: youtube.get_authorize_url(
     scope='https://www.googleapis.com/auth/youtube',
