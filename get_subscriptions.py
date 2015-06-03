@@ -8,6 +8,7 @@ from functools import wraps
 from io import StringIO
 from operator import itemgetter
 
+from flask.ext.heroku import Heroku
 from flask import (
     Flask, Response, redirect, request, render_template, send_from_directory,
     url_for
@@ -204,7 +205,7 @@ def send_static(path):
 
 
 if __name__ == "__main__":
-    app.run(
-        debug=True,
-        port=int(os.environ.get('PORT', 9000))
-    )
+    Heroku().init_app(app)
+
+    port = os.environ.get('PORT', 9000)
+    app.run(debug=True, host="0.0.0.0", port=int(port))
