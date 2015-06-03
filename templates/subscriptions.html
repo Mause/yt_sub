@@ -3,12 +3,14 @@
 {% block content %}
 
     <div class="container">
-        <div class="row">
-            <div class="column">
-                <a class="button" href="/logout">Logout</a>
-                <a class="button" href="/subscriptions.csv">As csv</a>
-            </div>
-        </div>
+        <section class="header">
+            <h2 class="title">
+                Get Subscriptions
+            </h2>
+            <a class="button" href="/logout">Logout</a>
+            <a class="button" href="/subscriptions.csv">As csv</a>
+        </section>
+
         <div class="row">
             <div class="column">
                 {% for sub in items %}
