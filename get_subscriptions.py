@@ -113,13 +113,6 @@ def paginate(func, *args, **kw):
 
 
 def get_subs(session):
-    # youtube.sess.inject(session)
-    # return youtube.gdata.subscriptions().list(
-    #     part='id,snippet,contentDetails',
-    #     mine=True,
-    #     maxResults=50
-    # ).execute()
-
     return paginate(
         session.get,
         'https://www.googleapis.com/youtube/v3/subscriptions',
