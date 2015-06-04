@@ -60,8 +60,7 @@ def oauth2callback():
 
 
 def paginate(func, *args, **kw):
-    kw['params']['pageToken'] = None
-    data = {'nextPageToken'}
+    data = {'nextPageToken'}  # just so it enters the loop initially
 
     while 'nextPageToken' in data:
         data = func(*args, **kw).json()
@@ -70,7 +69,7 @@ def paginate(func, *args, **kw):
         for error in data.get('error', {}).get('errors', []):
             error_type = EXCEPTIONS.get(error['reason'], Exception)
 
-            raise error_type(error['messages'])
+            raise error_type(error['message'])
 
         kw['params']['pageToken'] = data.get('nextPageToken')
 
