@@ -6,7 +6,6 @@ import csv
 import pickle
 from functools import wraps
 from io import StringIO
-from itertools import count
 from operator import itemgetter
 
 from flask.ext.heroku import Heroku
@@ -22,6 +21,9 @@ app = Flask(__name__)
 
 class AuthError(Exception):
     pass
+
+
+EXCEPTIONS = {'authError': AuthError}
 
 
 def login_required(func):
@@ -57,58 +59,20 @@ def oauth2callback():
     return resp
 
 
-def calculate_next_page_token(page, max_result):
-    page -= 1
-    low = 'AEIMQUYcgkosw048'
-    high = 'ABCDEFGHIJKLMNOP'
-    len_low = len(low)
-    len_high = len(high)
-
-    position = page * max_result
-
-    overflow_token = 'Q'
-    if position >= 128:
-        overflow_token_iteration = position // 128
-        overflow_token = '%sE' % high[overflow_token_iteration]
-        pass
-    low_iteration = int(position % len_low)
-
-    # at this position the iteration starts with 'I' again (after 'P')
-    if position >= 256:
-        multiplier = (position // 128) - 1
-        position -= 128 * multiplier
-        pass
-    high_iteration = int((position / len_low) % len_high)
-
-    return 'C{}{}{}AA'.format(
-        high[high_iteration],
-        low[low_iteration],
-        overflow_token
-    )
-
-
-def pages(max_result=50):
-    return (
-        calculate_next_page_token(page, max_result)
-        for page in count(1)
-    )
-
-
 def paginate(func, *args, **kw):
-    for page in pages():
-        kw['params']['pageToken'] = page
+    kw['params']['pageToken'] = None
+    data = {'nextPageToken'}
 
+    while 'nextPageToken' in data:
         data = func(*args, **kw).json()
         error = data.get('error')
-        if error:
-            error_type = error['errors'][0]['reason']
-            if error_type == 'authError':
-                raise AuthError()
-            else:
-                raise Exception(error['messages'])
 
-        if not data['items']:
-            break
+        for error in data.get('error', {}).get('errors', []):
+            error_type = EXCEPTIONS.get(error['reason'], Exception)
+
+            raise error_type(error['messages'])
+
+        kw['params']['pageToken'] = data.get('nextPageToken')
 
         yield from data['items']
 
