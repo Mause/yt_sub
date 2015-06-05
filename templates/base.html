@@ -34,9 +34,16 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    {% block content %}
+    <div class="container">
+        <section class="header">
+            <h2 class="title">
+                Get Youtube Subscriptions
+            </h2>
+            {% block buttons %}{% endblock %}
+        </section>
 
-    {% endblock %}
+        {% block content %}{% endblock %}
+    </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->

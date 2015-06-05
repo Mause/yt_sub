@@ -2,25 +2,20 @@
 
 
 
-{% block content %}
-    <div class="container">
-        <section class="header">
-            <h2 class="title">
-                Get Subscriptions
-            </h2>
-            <a class="button" href="/logout">Logout</a>
-            <a class="button" href="/subscriptions.csv">As csv</a>
-        </section>
+{% block buttons %}
+    <a class="button" href="/logout">Logout</a>
+    <a class="button" href="/subscriptions.csv">As csv</a>
+{% endblock %}
 
-        <div class="row">
-            <div class="column">
-                {% for sub in items %}
-                    <div>
-                        <h5>{{sub["snippet"]["title"]}}</h5>
-                        <p>{{sub["snippet"]["description"]}}</p>
-                    </div>
-                {% endfor %}
-            </div>
+{% block content %}
+    <div class="row">
+        <div class="column">
+            {% for sub in items %}
+                <div>
+                    <h5>{{sub["snippet"]["title"]}}</h5>
+                    <p>{{sub["snippet"]["description"]}}</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
