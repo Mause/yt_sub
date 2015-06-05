@@ -12,7 +12,7 @@
         <div class="column">
             {% for sub in items %}
                 <div>
-                    <h5>{{sub["snippet"]["title"]}}</h5>
+                    <h5><a href="https://www.youtube.com/channel/{{ sub['snippet']['resourceId']['channelId'] }}">{{sub["snippet"]["title"]}}</a></h5>
                     <p>{{sub["snippet"]["description"]}}</p>
                 </div>
             {% endfor %}
